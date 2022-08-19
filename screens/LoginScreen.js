@@ -1,9 +1,49 @@
-import React, { useState} from 'react';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, updateCurrentUser, updateProfile } from 'firebase/auth';
+import React, { useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
+import { auth } from '../firebase-config';
 
 const LoginScreen = () => {
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [displayName, setDisplayName] = useState("");
+    const navigation = useNavigation();
+
+    const handleSignUp = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+        .then(userCredentials => {
+            const user = userCredentials.user;
+            updateProfile(user, {displayName});
+        })
+        .catch(err => {
+            alert(err.message)
+        });
+    };
+
+    const handleLogin = () => {
+        signInWithEmailAndPassword(auth, email, password)
+        .then(userCredentials => {
+            const user = userCredentials.user;
+        })
+        .catch(err => {
+            alert(err.message)
+        })
+    };
+
+    useEffect(() => {
+
+          const unsubscribe = onAuthStateChanged(auth, (user) => {
+            // if user is null, then we force them to login
+            if (user) {
+            navigation.replace("Home")
+            }
+          });
+    
+          return unsubscribe;
+      }, []);
+    
 
     return (
         <KeyboardAvoidingView
@@ -13,29 +53,35 @@ const LoginScreen = () => {
             <View style={styles.inputContainer}>
                 <TextInput 
                 placeholder="Email"
+                value={email}
+                onChangeText={text => setEmail(text)}
                 style={styles.input}
                 
                 />
                 <TextInput 
                 placeholder="Username"
                 style={styles.input}
+                value={displayName}
+                onChangeText={text => setDisplayName(text)}
                 
                 />
                 <TextInput 
                 placeholder="Password"
                 style={styles.input}
                 secureTextEntry
+                value={password}
+                onChangeText={text => setPassword(text)}
                 />
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                onPress={() => {}}
+                onPress={handleLogin}
                 style={styles.button}>
                 
                 <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                onPress={() => {}}
+                onPress={handleSignUp}
                 style={[styles.button, styles.buttonOutline]}>
                 
                 <Text style={styles.buttonOutlineText}>Register</Text>
