@@ -34,8 +34,6 @@ const LoginScreen = () => {
                 
                 <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
-            </View>
-            <View style={styles.buttonContainer}>
                 <TouchableOpacity
                 onPress={() => {}}
                 style={[styles.button, styles.buttonOutline]}>
