@@ -15,7 +15,7 @@ const LoginScreen = () => {
         createUserWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
             const user = userCredentials.user;
-            updateProfile(user, {displayName});
+            return updateProfile(user, {displayName: displayName});
         })
         .catch(err => {
             alert(err.message)
