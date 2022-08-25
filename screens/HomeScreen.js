@@ -3,6 +3,7 @@ import { signOut } from 'firebase/auth';
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { auth } from '../firebase-config';
+import MainContainer from './Container';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -27,6 +28,7 @@ const HomeScreen = () => {
             <Text style={styles.buttonText}>Sign out</Text>
           </TouchableOpacity>
         </View>
+        
       )
     }
 
